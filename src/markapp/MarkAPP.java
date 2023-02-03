@@ -27,9 +27,9 @@ public class MarkAPP {
 
         //crearUsuarios(client,xmlManager);
 //        queryComprobarSiExiste(client);
-        //getAll(client);
-       // metodo(xmlManager);
-        modify( xmlManager);
+        getAll(client,xmlManager);
+        // metodo(xmlManager);
+       // modify(xmlManager);
 
     }
 
@@ -54,26 +54,31 @@ public class MarkAPP {
         xmlManager.write(docId, metadata, handle);
     }
 
-    public static void getAll(DatabaseClient client) {
+    public static void getAll(DatabaseClient client, XMLDocumentManager xmlManager) {
 
-        // Create a query manager
-        QueryManager queryMgr = client.newQueryManager();
-
-        // Define a query to retrieve all documents in the "users" collection
-        StructuredQueryBuilder qb = queryMgr.newStructuredQueryBuilder();
+        QueryManager queryManager = client.newQueryManager();
+        StructuredQueryBuilder qb = queryManager.newStructuredQueryBuilder();
         StructuredQueryDefinition query = qb.collection("users");
 
-        // Search for all matching documents
-        StringHandle results = new StringHandle();
-        queryMgr.search(query, results);
+        // Execute the search
+        SearchHandle results = queryManager.search(query, new SearchHandle());
 
-        // Display the results
-        System.out.println(results.get());
+        // Iterate through the search results
+        MatchDocumentSummary[] summaries = results.getMatchResults();
+        for (MatchDocumentSummary summary : summaries) {
+            // Read the contents of each document
+            StringHandle handle = new StringHandle();
+            xmlManager.read(summary.getUri(), handle);
 
-        // Release the client
-        client.release();
+            // Display the contents of the document
+            System.out.println(handle.get());
+        }   
+            // Release the client
+            client.release();
 
     }
+  
+    
 
     public static void queryComprobarSiExiste(DatabaseClient client) {
 
@@ -127,7 +132,8 @@ public class MarkAPP {
         String xmlContent = handle.get();
 
 // Agrega el nuevo usuario al contenido XML
-        xmlContent = xmlContent.replace("<name>chester</name>", "<name>Pedro</name>");
+        xmlContent = xmlContent.replace("<name>Pedro</name>", "<name>chester</name>");
+        xmlContent = xmlContent.replace("<email>chester@gmail.com</email>", "<email>perrete@gmail.com</email>");
 
 // Crea un handle para los nuevos datos XML
         handle = new StringHandle(xmlContent);
