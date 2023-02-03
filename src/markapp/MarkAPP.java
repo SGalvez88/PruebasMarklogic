@@ -22,28 +22,26 @@ public class MarkAPP {
     public static void main(String[] args) {
 
         DatabaseClient client = DatabaseClientFactory.newClient(HOST, PORT, USERNAME, PASSWORD, DatabaseClientFactory.Authentication.DIGEST);
-         // Crea un gestor de documentos XML
+        // Crea un gestor de documentos XML
         XMLDocumentManager xmlManager = client.newXMLDocumentManager();
-                
-//        crearUsuarios(client,xmlManager);
-        
+
+        //crearUsuarios(client,xmlManager);
 //        queryComprobarSiExiste(client);
-        
-        
-        getAll(client);
-       
+        //getAll(client);
+       // metodo(xmlManager);
+        modify( xmlManager);
+
     }
-    
-    
-    public static void crearUsuarios(DatabaseClient client, XMLDocumentManager xmlManager){
+
+    public static void crearUsuarios(DatabaseClient client, XMLDocumentManager xmlManager) {
 
         // Define los datos de usuario en formato XML
         String xmlContent = "<user>"
-                + "<name>Jairo</name>"
-                + "<email>Jairo@gmail.com</email>"
+                + "<name>chester</name>"
+                + "<email>chester@gmail.com</email>"
                 + "</user>";
 
-        String docId = "/users/user4.xml";
+        String docId = "/users/user5.xml";
 
         // Define the metadata for the document
         DocumentMetadataHandle metadata = new DocumentMetadataHandle();
@@ -55,29 +53,28 @@ public class MarkAPP {
         // Guarda los datos XML en la base de datos "prueba"
         xmlManager.write(docId, metadata, handle);
     }
-    
-    public static void getAll(DatabaseClient client){
-        
-         // Create a query manager
-      QueryManager queryMgr = client.newQueryManager();
 
-      // Define a query to retrieve all documents in the "users" collection
-      StructuredQueryBuilder qb = queryMgr.newStructuredQueryBuilder();
-      StructuredQueryDefinition query = qb.collection("users");
+    public static void getAll(DatabaseClient client) {
 
-      // Search for all matching documents
-      StringHandle results = new StringHandle();
-      queryMgr.search(query, results);
+        // Create a query manager
+        QueryManager queryMgr = client.newQueryManager();
 
-      // Display the results
-      System.out.println(results.get());
+        // Define a query to retrieve all documents in the "users" collection
+        StructuredQueryBuilder qb = queryMgr.newStructuredQueryBuilder();
+        StructuredQueryDefinition query = qb.collection("users");
 
-      // Release the client
-      client.release();
-    
+        // Search for all matching documents
+        StringHandle results = new StringHandle();
+        queryMgr.search(query, results);
+
+        // Display the results
+        System.out.println(results.get());
+
+        // Release the client
+        client.release();
+
     }
-    
-    
+
     public static void queryComprobarSiExiste(DatabaseClient client) {
 
         //Este metodo devuelve si hay un usuario segun la query, en este caso devuelve que existe 1
@@ -98,7 +95,45 @@ public class MarkAPP {
         client.release();
 
     }
-    
-    
-    
+
+    public static void metodo(XMLDocumentManager xmlManager) {
+
+        String docId = "/users/user2.xml";
+
+        // Crea un handle para los datos XML
+        StringHandle handle = new StringHandle();
+
+        // Lee los datos XML de la base de datos "prueba"
+        xmlManager.read(docId, handle);
+
+        // Obtiene el contenido del documento
+        String xmlContent = handle.get();
+
+        // Muestra el contenido del documento en la consola
+        System.out.println(xmlContent);
+
+    }
+
+    public static void modify(XMLDocumentManager xmlManager) {
+        String docId = "/users/user5.xml";
+
+// Crea un handle para los datos XML
+        StringHandle handle = new StringHandle();
+
+// Lee los datos XML de la base de datos "prueba"
+        xmlManager.read(docId, handle);
+
+// Obtiene el contenido del documento
+        String xmlContent = handle.get();
+
+// Agrega el nuevo usuario al contenido XML
+        xmlContent = xmlContent.replace("<name>chester</name>", "<name>Pedro</name>");
+
+// Crea un handle para los nuevos datos XML
+        handle = new StringHandle(xmlContent);
+
+// Guarda los nuevos datos XML en la base de datos "prueba"
+        xmlManager.write(docId, handle);
+
+    }
 }
