@@ -27,9 +27,13 @@ public class MarkAPP {
 
         //crearUsuarios(client,xmlManager);
 //        queryComprobarSiExiste(client);
-        getAll(client,xmlManager);
-         //findOneBy(xmlManager);
-       // modify(xmlManager);
+        getAll(client, xmlManager);
+        //findOneBy(xmlManager);
+        // modify(xmlManager);
+        // Delete the document
+        
+        
+        //xmlManager.delete(docId);
 
     }
 
@@ -72,9 +76,9 @@ public class MarkAPP {
 
             // Display the contents of the document
             System.out.println(handle.get());
-        }   
-            // Release the client
-            client.release();
+        }
+        // Release the client
+        client.release();
 
     }
 
