@@ -28,7 +28,7 @@ public class MarkAPP {
         //crearUsuarios(client,xmlManager);
 //        queryComprobarSiExiste(client);
         getAll(client,xmlManager);
-        // metodo(xmlManager);
+         //findOneBy(xmlManager);
        // modify(xmlManager);
 
     }
@@ -37,8 +37,8 @@ public class MarkAPP {
 
         // Define los datos de usuario en formato XML
         String xmlContent = "<user>"
-                + "<name>chester</name>"
-                + "<email>chester@gmail.com</email>"
+                + "<name>marta</name>"
+                + "<email>marta@gmail.com</email>"
                 + "</user>";
 
         String docId = "/users/user5.xml";
@@ -77,8 +77,6 @@ public class MarkAPP {
             client.release();
 
     }
-  
-    
 
     public static void queryComprobarSiExiste(DatabaseClient client) {
 
@@ -98,10 +96,9 @@ public class MarkAPP {
 
         // Cerrar la conexión
         client.release();
-
     }
 
-    public static void metodo(XMLDocumentManager xmlManager) {
+    public static void findOneBy(XMLDocumentManager xmlManager) {
 
         String docId = "/users/user2.xml";
 
@@ -122,24 +119,23 @@ public class MarkAPP {
     public static void modify(XMLDocumentManager xmlManager) {
         String docId = "/users/user5.xml";
 
-// Crea un handle para los datos XML
+        // Crea un handle para los datos XML
         StringHandle handle = new StringHandle();
 
-// Lee los datos XML de la base de datos "prueba"
+        // Lee los datos XML de la base de datos "prueba"
         xmlManager.read(docId, handle);
 
-// Obtiene el contenido del documento
+        // Obtiene el contenido del documento
         String xmlContent = handle.get();
 
-// Agrega el nuevo usuario al contenido XML
+        // Agrega el nuevo usuario al contenido XML
         xmlContent = xmlContent.replace("<name>Pedro</name>", "<name>chester</name>");
         xmlContent = xmlContent.replace("<email>chester@gmail.com</email>", "<email>perrete@gmail.com</email>");
 
-// Crea un handle para los nuevos datos XML
+        // Crea un handle para los nuevos datos XML
         handle = new StringHandle(xmlContent);
 
-// Guarda los nuevos datos XML en la base de datos "prueba"
+        // Guarda los nuevos datos XML en la base de datos "prueba"
         xmlManager.write(docId, handle);
-
     }
 }
